@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banki Időpontfoglaló</title>
+    <link href="https://jsdelivr.net" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-light p-4">
+    <div class="container main-container">
+        <div class="text-center my-4">
+            <h2>Nemzeti Bank - Időpontfoglalás</h2>
+            <p class="text-muted">Moduláris NoSQL + Node.js kliensoldal</p>
+        </div>
+        <div class="card p-4 mb-4 shadow-sm">
+            <h4 class="mb-3 text-primary">Új időpont rögzítése</h4>
+            <form id="bookingForm">
+                <div class="mb-3"><label class="form-label">Teljes név</label><input type="text" id="customerName" class="form-control" required></div>
+                <div class="mb-3"><label class="form-label">E-mail cím</label><input type="email" id="customerEmail" class="form-control" required></div>
+                <div class="mb-3">
+                    <label class="form-label">Bankfiók</label>
+                    <select id="branchName" class="form-select" required>
+                        <option value="Központi Fiók">Központi Fiók (Budapest)</option>
+                        <option value="Érdi Fiók">Érdi Fiók</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Ügyintézés</label>
+                    <select id="serviceType" class="form-select" required>
+                        <option value="Számlanyitás">Számlanyitás</option>
+                        <option value="Hitelügyintézés">Hitelügyintézés</option>
+                    </select>
+                </div>
+                <div class="mb-3"><label class="form-label">Dátum és idő</label><input type="datetime-local" id="appointmentDate" class="form-control" required></div>
+                <button type="submit" class="btn btn-primary w-100 fw-bold">Rögzítés</button>
+            </form>
+            <div id="formMessage" class="alert mt-3 d-none"></div>
+        </div>
+        <div class="card p-4 shadow-sm">
+            <h4 class="mb-3 text-success">Aktív foglalások kiolvasása</h4>
+            <table class="table table-striped m-0">
+                <thead><tr><th>Ügyfél</th><th>Bankfiók / Ügyintézés</th><th>Időpont</th></tr></thead>
+                <tbody id="appointmentsTableBody"><tr><td colspan="3" class="text-center text-muted">Betöltés...</td></tr></tbody>
+            </table>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
