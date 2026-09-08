@@ -1,2 +1,153 @@
-.main-container { max-width: 700px; }
-.app-badge { font-size: 0.8rem; }
+@import url('https://googleapis.com');
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #ffffff !important;
+    color: #1a2521;
+    letter-spacing: -0.01em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+}
+
+/* --- Központi Prémium Tároló Blokk --- */
+.container {
+    max-width: 650px;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* --- Fejléc Stílus --- */
+h2 {
+    color: #0b462d; /* Hivatalos mély bankzöld */
+    font-weight: 700;
+    font-size: 2.2rem;
+    margin-bottom: 8px;
+}
+
+.text-muted {
+    color: #52665d !important;
+    font-size: 0.95rem;
+    font-weight: 400;
+    margin-bottom: 30px;
+}
+
+/* --- Prémium Kártyák (Cards) --- */
+.card {
+    background: #ffffff;
+    border: 1px solid #e1e8e5 !important;
+    border-radius: 16px !important;
+    box-shadow: 0 10px 30px rgba(11, 70, 45, 0.04) !important;
+    padding: 30px !important;
+    text-align: left;
+}
+
+h4.text-primary, h4.text-success {
+    color: #0b462d !important;
+    font-weight: 600;
+    text-align: center;
+    border-bottom: 2px solid #ebf2ef;
+    padding-bottom: 14px;
+    margin-bottom: 24px;
+}
+
+/* --- ŰRLAP MEZŐK: EGY VONALBA IGAZÍTÁSA (Rendezett Grid) --- */
+#bookingForm .mb-3 {
+    display: grid;
+    grid-template-columns: 180px 1fr; /* A feliratok fix 180px szélesek, a cellák pedig pontosan egy vonalban kezdődnek! */
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 16px !important;
+}
+
+.form-label {
+    color: #2c3e35;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0 !important; /* Kivesszük az alsó margót az egy vonalba húzás miatt */
+    text-align: left;
+}
+
+.form-control, .form-select {
+    width: 100%;
+    border: 1px solid #c9d6d0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.95rem;
+    color: #1a2521;
+    background-color: #fafbfa;
+    box-sizing: border-box;
+    transition: all 0.15s ease-in-out;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #116943;
+    box-shadow: 0 0 0 4px rgba(17, 105, 67, 0.12);
+    background-color: #ffffff;
+    outline: none;
+}
+
+/* --- Prémium Gomb (Mély Smaragdzöld) --- */
+.btn-primary {
+    background-color: #116943 !important;
+    border-color: #116943 !important;
+    border-radius: 8px !important;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 14px;
+    margin-top: 15px;
+    width: 100%;
+    transition: all 0.2s ease !important;
+}
+
+.btn-primary:hover {
+    background-color: #0b462d !important;
+    border-color: #0b462d !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(11, 70, 45, 0.15);
+}
+
+/* --- Hivatalos Táblázat (Table) --- */
+.table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    margin: 0;
+}
+
+.table th {
+    background-color: #f4f7f5 !important;
+    color: #384d42 !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    padding: 14px !important;
+    border-bottom: 2px solid #e1e8e5 !important;
+    text-align: left;
+}
+
+.table td {
+    padding: 14px !important;
+    border-bottom: 1px solid #ebf2ef !important;
+    color: #2c3e35;
+    font-size: 0.95rem;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #fafbfa !important;
+}
+
+/* --- Kis kiegészítő dizájn elemek --- */
+.badge.bg-secondary {
+    background-color: #ebf2ef !important;
+    color: #116943 !important;
+    font-weight: 600;
+    border: 1px solid #d4e3dd;
+    padding: 5px 10px;
+    border-radius: 6px;
+}

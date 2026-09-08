@@ -1,8 +1,8 @@
 {
-  "name": "banki-idopontfoglalo",
+  "name": "banki-idopontfoglalo-server",
   "version": "1.0.0",
-  "description": "Banki idopontfoglalo NoSQL vizsgaremek",
-  "main": "server/src/app.js",
+  "description": "Szerveroldal",
+  "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js"
   },
