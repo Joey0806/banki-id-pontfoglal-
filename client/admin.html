@@ -3,75 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Banki Időpontfoglaló - Admin</title>
-    <link href="https://jsdelivr.net" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <title>Nemzeti Bank - Adminisztráció</title>
+    <link href="client/admin.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="admin.css">
 </head>
-<body class="bg-dark p-4 text-white">
-    <div class="container" style="max-width: 800px;">
-        
-        <div class="text-center my-4">
-            <h2 class="text-warning">🔒 Banki Adminisztrációs Felület</h2>
-            <p class="text-light-50 opacity-75">NoSQL Adatbázis Kiolvasás (Mongoose-mentesen)</p>
-            <a href="index.html" class="btn btn-outline-info btn-sm fw-bold">⬅️ Vissza az Ügyfélkapura</a>
-        </div>
+<body>
 
-        <!-- KIOLVASÁS TÁBLÁZAT -->
-        <div class="card p-4 shadow bg-secondary text-white border-0">
-            <h4 class="mb-3 text-warning">Aktív foglalások élő kiolvasása</h4>
-            <div class="table-responsive">
-                <table class="table table-dark table-striped m-0 align-middle">
+    <div class="container">
+        
+        <div class="card">
+            <div class="card-title">Beérkezett Időpont Foglalások</div>
+            
+            <div class="table-container mb-4">
+                <table class="table table-striped align-middle">
                     <thead>
                         <tr>
                             <th>Ügyfél adatai</th>
-                            <th>Fiók / Ügyintézés</th>
+                            <th>Fiók / Szolgáltatás</th>
                             <th>Időpont</th>
                         </tr>
                     </thead>
-                    <tbody id="appointmentsTableBody">
-                        <tr>
-                            <td colspan="3" class="text-center text-muted">Adatok betöltése...</td>
-                        </tr>
+                    <tbody id="tableBody">
+                        <tr><td colspan="3" class="text-center text-muted py-3">Rekordok betöltése folyamatban...</td></tr>
                     </tbody>
                 </table>
+            </div>
+
+           <div class="text-center">
+                <button onclick="window.location.href='/idopontfoglalas'" class="btn btn-outline-light px-4 py-2 fw-semibold">
+                    Kijelentkezés
+                </button>
             </div>
         </div>
 
     </div>
 
-    <!-- Admin kiolvasó JS logika -->
     <script>
-        const API_URL = "http://localhost:5000/api/appointments";
+        const API_URL = "/api/appointments";
 
-        async function loadAdminData() {
+        async function loadRecords() {
             try {
-                const response = await fetch(API_URL);
-                const data = await response.json();
-                const tbody = document.getElementById('appointmentsTableBody');
-                tbody.innerHTML = '';
-
-                if (data.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="3" class="text-center text-muted">Nincs aktív foglalás a MongoDB-ben.</td></tr>`;
-                    return;
-                }
-
+                const res = await fetch(API_URL);
+                const data = await res.json();
+                const tbody = document.getElementById('tableBody');
+                tbody.innerHTML = data.length === 0 ? '<tr><td colspan="3" class="text-center text-muted py-4">Nincs tárolt rekord az adatbázisban.</td></tr>' : '';
+                
                 data.forEach(app => {
-                    const row = document.createElement('tr');
                     const szepDatum = app.appointmentDate.replace('T', ' ').substring(0, 16);
-                    row.innerHTML = `
-                        <td><strong>${app.customerName}</strong><br><small class="text-muted">${app.customerEmail}</small></td>
-                        <td>${app.branchName}<br><span class="badge bg-warning text-dark mt-1">${app.serviceType}</span></td>
-                        <td class="fw-bold text-info">${szepDatum}</td>
-                    `;
-                    tbody.appendChild(row);
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><b>${app.customerName}</b><br><small class="text-muted">${app.customerEmail}</small></td>
+                            <td>${app.branchName}<br><span class="badge-service mt-1">${app.serviceType}</span></td>
+                            <td class="fw-bold text-center" style="color: #2ed583;">${szepDatum}</td>
+                        </tr>`;
                 });
-            } catch (error) {
-                console.error("Hiba az admin kiolvasáskor:", error);
-                document.getElementById('appointmentsTableBody').innerHTML = `<tr><td colspan="3" class="text-center text-danger">Szerver kapcsolódási hiba.</td></tr>`;
+            } catch (err) { 
+                console.error(err);
+                document.getElementById('tableBody').innerHTML = '<tr><td colspan="3" class="text-center text-danger py-3">Szerver kapcsolódási hiba!</td></tr>';
             }
         }
 
-        window.onload = loadAdminData;
+        window.onload = loadRecords;
     </script>
 </body>
 </html>

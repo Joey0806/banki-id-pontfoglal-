@@ -1,6 +1,6 @@
 const API_URL = "/api/appointments";
 
-// 1. DINAMIKUS KIOLVASÁS a MongoDB-ből
+//Rekord Kiolvasás 
 async function loadAppointments() {
     try {
         const response = await fetch(API_URL);
@@ -9,7 +9,7 @@ async function loadAppointments() {
         tbody.innerHTML = '';
 
         if (data.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="3" class="text-center text-muted">Nincs aktív foglalás a NoSQL adatbázisban.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="3" class="text-center text-muted">Nincs aktív időpont foglalás.</td></tr>`;
             return;
         }
 
@@ -28,7 +28,7 @@ async function loadAppointments() {
     }
 }
 
-// 2. RÖGZÍTÉS az adatbázisba
+// 2. Rögzítés az adatbázisba
 document.getElementById('bookingForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const msgDiv = document.getElementById('formMessage');
@@ -49,15 +49,13 @@ document.getElementById('bookingForm').addEventListener('submit', async (e) => {
         });
         const result = await response.json();
 
-        msgDiv.classList.add('d-none'); // Elrejtjük az esetleges korábbi hibaüzenetet
+        msgDiv.classList.add('d-none'); 
 
         if (response.ok) {
-            // FIX ÉS TISZTA NATÍV FELUGRÓ ÜZENET
             alert("Sikeresen rögzítve a NoSQL adatbázisba!");
             
             document.getElementById('bookingForm').reset();
-            loadAppointments(); // DINAMIKUSAN, azonnal frissítjük a táblázatot az oldal tetejére ugrás nélkül
-        } else {
+            loadAppointments(); 
             msgDiv.textContent = result.message;
             msgDiv.className = "alert mt-3 alert-danger d-block";
         }
@@ -67,5 +65,5 @@ document.getElementById('bookingForm').addEventListener('submit', async (e) => {
     }
 });
 
-// Első betöltés az oldal megnyitásakor
+
 window.onload = loadAppointments;

@@ -3,23 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Banki Időpontfoglaló - Prémium</title>
-    <link href="hcilent/style.css" rel="stylesheet">
+    <title>Nemzeti Bank - Ügyfélkapu</title>
+    <link href="style.css" rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="container">
         
-        <!-- MODERN BANKI FEJLÉC KÁRTYA -->
+        
         <div class="bank-header-card">
             <h2>NEMZETI BANK</h2>
-            <p>Digitális Ügyfélkapu & Időpontfoglalási Rendszer</p>
+            <p>Online Időpontfoglalás</p>
         </div>
 
-        <!-- 1. KÁRTYA: IDŐPONTKÉRÉSI FELÜLET -->
+        
+        <div id="successToast" class="success-toast">
+            Belépési időpontját sikeresen rögzítettük!
+        </div>
+
+        <!-- Időpont foglaló űrlap -->
         <div class="card">
-            <div class="card-title">📅 Új időpont rögzítése</div>
+            <div class="card-title">Új Banki időpont rögzítése</div>
             <form id="bookingForm">
                 <div class="form-group-row">
                     <label class="form-label">Teljes név</label>
@@ -30,17 +36,22 @@
                     <input type="email" id="customerEmail" class="form-control" placeholder="Pl. janos@email.com" required>
                 </div>
                 <div class="form-group-row">
-                    <label class="form-label">Bankfiók</label>
+                    <label class="form-label">Bankfiók / Város</label>
                     <select id="branchName" class="form-select" required>
-                        <option value="Központi Fiók">Központi Fiók (Budapest)</option>
+                        <option value="Központi Fiók (Budapest)">Központi Fiók (Budapest)</option>
                         <option value="Érdi Fiók">Érdi Fiók</option>
+                        <option value="Debreceni Fiók">Debreceni Fiók</option>
+                        <option value="Szegedi Fiók">Szegedi Fiók</option>
+                        <option value="Győri Fiók">Győri Fiók</option>
                     </select>
                 </div>
                 <div class="form-group-row">
-                    <label class="form-label">Ügyintézés</label>
+                    <label class="form-label">Ügyintézés típusa</label>
                     <select id="serviceType" class="form-select" required>
                         <option value="Számlanyitás">Számlanyitás & Kártyaügyek</option>
                         <option value="Hitelügyintézés">Hitelügyintézés & Kölcsönök</option>
+                        <option value="Megtakarítás">Megtakarítás & Befektetés</option>
+                        <option value="Személyi Bankár">Személyi Bankár szolgáltatás</option>
                     </select>
                 </div>
                 <div class="form-group-row">
@@ -51,50 +62,44 @@
             </form>
         </div>
 
-        <!-- 2. KÁRTYA: ADMIN FELÜLET (ÉLŐ KIOLVASÁS) -->
+        <!-- Admin login panel -->
         <div class="card">
-            <div class="card-title">🔒 Adminisztráció - Aktív foglalások</div>
-            <div class="table-container">
-                <table class="table table-striped table-hover align-middle">
-                    <thead>
-                        <tr>
-                            <th>Ügyfél adatai</th>
-                            <th>Fiók / Ügyintézés</th>
-                            <th>Időpont</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody">
-                        <tr><td colspan="3" class="text-center text-muted py-3">Adatok betöltése folyamatban...</td></tr>
-                    </tbody>
-                </table>
-            </div>
+            <div class="card-title">Banki munkatárs Belépés</div>
+            <form id="loginForm">
+                <div class="form-group-row">
+                    <label class="form-label">Felhasználónév</label>
+                    <input type="text" id="adminUser" class="form-control" placeholder="admin" required>
+                </div>
+                <div class="form-group-row">
+                    <label class="form-label">Jelszó</label>
+                    <input type="password" id="adminPass" class="form-control" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="background:#384d42 !important;">Belépés és átirányítás az admin felületre</button>
+            </form>
+            <div id="loginError" class="text-danger text-center mt-3 fw-semibold d-none">Hibás felhatalmazási adatok!</div>
         </div>
 
     </div>
 
-    <!-- JavaScript Logika betöltése dinamikus badge kezeléssel -->
     <script>
-        const API_URL = "http://localhost:5000/api/appointments";
+        const API_URL = "/api/appointments";
 
-        async function load() {
-            try {
-                const res = await fetch(API_URL);
-                const data = await res.json();
-                const tbody = document.getElementById('tableBody');
-                tbody.innerHTML = data.length === 0 ? '<tr><td colspan="3" class="text-center text-muted py-4">Nincs aktív foglalás a NoSQL adatbázisban.</td></tr>' : '';
-                
-                data.forEach(app => {
-                    const szepDatum = app.appointmentDate.replace('T', ' ');
-                    tbody.innerHTML += `
-                        <tr>
-                            <td><b>${app.customerName}</b><br><small class="text-muted">${app.customerEmail}</small></td>
-                            <td>${app.branchName}<br><span class="badge-service mt-1">${app.serviceType}</span></td>
-                            <td class="fw-bold text-success">${szepDatum}</td>
-                        </tr>`;
-                });
-            } catch (err) { console.error(err); }
-        }
+        
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const user = document.getElementById('adminUser').value;
+            const pass = document.getElementById('adminPass').value;
+            const errorDiv = document.getElementById('loginError');
 
+            if (user === "BankAdmin" && pass === "Bank789") {
+                errorDiv.classList.add('d-none');
+                window.location.href = "/admin"; // Átirányítás az adminra
+            } else {
+                errorDiv.classList.remove('d-none');
+            }
+        });
+
+        // Új időpont rögzítés
         document.getElementById('bookingForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const payload = {
@@ -108,14 +113,13 @@
             try {
                 const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
                 if (res.ok) {
-                    alert("Sikeresen rögzítve a NoSQL adatbázisba!");
+                    const toast = document.getElementById('successToast');
+                    toast.style.display = 'block';
+                    setTimeout(() => { toast.style.display = 'none'; }, 3000);
                     document.getElementById('bookingForm').reset();
-                    load();
                 } else { const r = await res.json(); alert(r.message); }
-            } catch (err) { alert("Szerver hiba történt."); }
+            } catch (err) { alert("Adatbázis elérés hiba."); }
         });
-
-        window.onload = load;
     </script>
 </body>
 </html>
