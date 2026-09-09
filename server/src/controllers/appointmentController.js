@@ -1,19 +1,17 @@
 const { MongoClient } = require('mongodb');
 
-// Docker belső hálózati elérés a database konténernévvel
+
 const url = process.env.MONGO_URI || 'mongodb://database:27017/bank-db';
 const client = new MongoClient(url);
 const dbName = 'bank-db';
 
 class AppointmentController {
-    // 1. RÖGZÍTÉS LOGIKA
     async createAppointment(req, res) {
         try {
             const { customerName, customerEmail, branchName, serviceType, appointmentDate } = req.body;
             await client.connect();
             const collection = client.db(dbName).collection('appointments');
 
-            // Validáció: Foglalt-e már az időpont abban a bankfiókban?
             const existing = await collection.findOne({ branchName, appointmentDate, status: 'aktív' });
             if (existing) {
                 return res.status(400).json({ message: 'Ez az időpont ebben a bankfiókban már foglalt!' });
@@ -27,7 +25,6 @@ class AppointmentController {
         }
     }
 
-    // 2. KIOLVASÁS LOGIKA
     async getAppointments(req, res) {
         try {
             await client.connect();

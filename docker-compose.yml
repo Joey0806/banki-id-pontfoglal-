@@ -20,7 +20,7 @@ services:
       - PORT=5000
       - MONGO_URI=mongodb://database:27017/bank-db
     volumes:
-      - ./client:/usr/src/client # Becsatoljuk a külső client mappát is a konténerbe
+      - ./client:/usr/src/client 
     depends_on:
       - database
 
