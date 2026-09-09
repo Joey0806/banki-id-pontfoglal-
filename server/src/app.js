@@ -1,21 +1,26 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 
-// Pontos elérés a te Controllers mappádhoz a képed alapján
-const appointmentController = require('./src/controllers/appointmentController');
+// TŰPONTOS ELÉRÉSI ÚT A TE ROUTEREDHEZ A NAGY 'R' BETŰVEL!
+const appointmentRoutes = require('./routes/appointmentRoutes');
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-// API végpontok bekötése a kontrollerhez
-app.post('/api/appointments', (req, res) => appointmentController.createAppointment(req, res));
-app.get('/api/appointments', (req, res) => appointmentController.getAppointments(req, res));
+// API végpontok átadása a Routernek
+app.use('/api/appointments', appointmentRoutes);
 
-// Alapértelmezett teszt üzenet
+// --- FRONTEND KISZOLGÁLÁSA FIXEN A 5000-ES PORTON ---
+// Mivel az app.js az src-ben van, a kinti client mappát két szinttel feljebb érjük el:
+const clientPath = path.join(__dirname, '..', '..', 'client');
+app.use(express.static(clientPath));
+
+// Ha a felhasználó megnyitja a http://localhost:5000/ címet
 app.get('/', (req, res) => {
-    res.send('A Banki NoSQL API sikeresen fut.');
+    res.sendFile(path.join(clientPath, 'index.html'));
 });
 
 const PORT = process.env.PORT || 5000;
